@@ -38,17 +38,16 @@ let rec reverseString s =
 
 let addStrings a b =
     let add x y =
-      if (String.length x = 0)
-      and (String.length y = 0)
-      then empty
+      if (String.length x = 0) and (String.length y = 0) then empty
       else
-        let hx = int_of_string @@ getStringHead x in
-        let hy = int_of_string @@ getStringHead y in
-      
+        let xHeadNum = int_of_string @@ getStringHead x in
+        let yHeadNum = int_of_string @@ getStringHead y in
         let tx = String.sub x 1 @@ (String.length x)-1 in
-        let ty = String.sub x 1 @@ (String.length x)-1 in      
+        let ty = String.sub y 1 @@ (String.length y)-1 in      
         let hz = hx + hy;
-        (string_of_int @@ hz-10) ^ (add tx ty)
+        match hz with
+        | i when i<10 ->  (string_of_int @@ hz) ^ (add tx ty)
+        | i when i>9 -> (string_of_int @@ hz-10) ^ (add tx ty)
     in
     let a' = reverseString a in 
     let b' = reverseString b in
