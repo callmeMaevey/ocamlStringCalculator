@@ -11,7 +11,8 @@ let getStringHead s =
 let getStringTail s =
   let open String in
   if (length s) > 1
-  then sub s 1 @@ len-1
+  then sub s 1 @@ (length s) -1
+  else empty
 
 
 let rec charList_of_string s =
@@ -22,7 +23,7 @@ let rec charList_of_string s =
   | _ -> (getStringHead s)::(charList_of_string @@ getStringTail s)
 
 
-let rec printcharlist = function
+let rec printCharList = function
   | [] -> ()
   | h::t ->
       print_char h;
@@ -33,21 +34,25 @@ let rec reverseString s =
   let open String in 
   match (length s) with
   | 0 -> empty
-  | 1 -> head
-  | _ -> (reverseString @@ getStringTailtail s)^(getStringHead s)
+  | 1 -> getStringHead s
+  | _ -> (reverseString @@ getStringTail s)^(getStringHead s)
 
 let addStrings a b =
-    let add x y =
-      if (String.length x = 0) and (String.length y = 0) then empty
-      else
-        let xHeadNum = int_of_string @@ getStringHead x in
-        let yHeadNum = int_of_string @@ getStringHead y in
+    let rec add x y =
+      match x,y with
+      | x,y when (String.length x = 0) -> String.empty
+      | x,y when (String.length y = 0) -> String.empty
+      | _ ->
+        let hx = int_of_string @@ getStringHead x in
+        let hy = int_of_string @@ getStringHead y in
+
         let tx = String.sub x 1 @@ (String.length x)-1 in
-        let ty = String.sub y 1 @@ (String.length y)-1 in      
-        let hz = hx + hy;
+        let ty = String.sub y 1 @@ (String.length y)-1 in
+        
+        let hz = hx + hy in
         match hz with
         | i when i<10 ->  (string_of_int @@ hz) ^ (add tx ty)
-        | i when i>9 -> (string_of_int @@ hz-10) ^ (add tx ty)
+        | i when i>9  -> (string_of_int @@ hz-10) ^ (add tx ty)
     in
     let a' = reverseString a in 
     let b' = reverseString b in
@@ -70,17 +75,14 @@ let addCharLists a b =
   in
   let rec add a b = 
     match a,b with
-    | (ha::ta),(hb::tb) -> 
-        let head = add [ha],[hb] in
-        let tail = add ta tb in
-        tail :: head
+    | (ha::ta),(hb::tb) -> ( add [ha] [hb] ) :: ( add ta tb)
     | [a],[b] ->
         let a' = intOfChar a in
         let b' = intOfChar b in
         let c' = a' + b' in
         let c  = string_of_int z' in
         match z with
-        | String.length z > 1 ->
+        | s when String.length s < 1 -> empty
             (*todo: pickup here sweetpea*)
     | [],[] -> []
   in 
